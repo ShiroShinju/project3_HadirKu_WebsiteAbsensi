@@ -1,0 +1,104 @@
+### 1. Root Check
+GET http://localhost:5000/
+
+### 2. Karyawan Endpoints
+# Ambil Semua Karyawan
+GET http://localhost:5000/api/karyawan
+
+### Ambil Karyawan By ID
+GET http://localhost:5000/api/karyawan/1
+
+### Tambah Karyawan Baru
+POST http://localhost:5000/api/karyawan
+Content-Type: application/json
+
+{
+  "nama": "Rian Pratama",
+  "email": "rian.pratama@hadirku.id",
+  "posisi": "Frontend Developer",
+  "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150",
+  "role": "karyawan"
+}
+
+### Update Data Karyawan
+PUT http://localhost:5000/api/karyawan/1
+Content-Type: application/json
+
+{
+  "nama": "Alexsander Jajang",
+  "email": "alexjajang@gmail.com",
+  "posisi": "Staff Ahli IT & Software Engineer",
+  "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
+  "role": "karyawan"
+}
+
+### Login Karyawan
+POST http://localhost:5000/api/karyawan/login
+Content-Type: application/json
+
+{
+  "email": "alexjajang@gmail.com"
+}
+
+### 3. Absensi Endpoints
+# Statistik Admin Dashboard
+GET http://localhost:5000/api/absensi/statistik
+
+### Semua Riwayat Presensi
+GET http://localhost:5000/api/absensi
+
+### Presensi Hari Ini
+GET http://localhost:5000/api/absensi/hari-ini
+
+### Status Presensi Hari Ini untuk Karyawan ID 1
+GET http://localhost:5000/api/absensi/status-hari-ini/1
+
+### Riwayat Absensi Karyawan ID 1
+GET http://localhost:5000/api/absensi/riwayat/1
+
+### Absen Masuk (Clock In)
+POST http://localhost:5000/api/absensi/masuk
+Content-Type: application/json
+
+{
+  "karyawan_id": 2,
+  "lokasi_masuk": "Dalam Radius Kantor (Graha Pratama Lt. 8)",
+  "catatan": "Tepat waktu"
+}
+
+### Absen Pulang (Clock Out)
+POST http://localhost:5000/api/absensi/pulang
+Content-Type: application/json
+
+{
+  "karyawan_id": 2,
+  "lokasi_pulang": "Dalam Radius Kantor (Graha Pratama Lt. 8)",
+  "catatan": "Shift selesai"
+}
+
+### 4. Izin / Cuti Endpoints
+# Ambil Semua Pengajuan Izin
+GET http://localhost:5000/api/izin
+
+### Ambil Izin per Karyawan
+GET http://localhost:5000/api/izin/karyawan/2
+
+### Ajukan Izin / Cuti
+POST http://localhost:5000/api/izin
+Content-Type: application/json
+
+{
+  "karyawan_id": 1,
+  "tanggal_mulai": "2026-09-20",
+  "tanggal_selesai": "2026-09-22",
+  "tipe": "Cuti Tahunan",
+  "alasan": "Menghadiri acara keluarga di luar kota"
+}
+
+### Update Status Izin (Disetujui / Ditolak)
+PUT http://localhost:5000/api/izin/1/status
+Content-Type: application/json
+
+{
+  "status": "Disetujui"
+}

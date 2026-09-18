@@ -1,0 +1,51 @@
+1. Tentukan Pengguna & Masalah
+•	Pengguna: Karyawan (staf kantor atau operasional) dan Tim HR/Admin.
+•	Masalah: Mesin absensi fisik (seperti fingerprint atau kartu tap) sering menimbulkan antrean panjang di jam masuk, sering gagal membaca sidik jari yang basah/kotor, dan karyawan tidak bisa mengecek riwayat kehadirannya sendiri secara transparan.
+
+2. Data / Mini Interview (Empathy Data)
+•	Karyawan sering terlambat hitungan detik hanya gara-gara antrean mesin fingerprint menumpuk di lobi.
+•	Karyawan sering waswas dan lupa apakah tadi sudah berhasil absen pulang atau belum.
+•	Tim HR menghabiskan banyak waktu tiap akhir bulan untuk merekap data mesin fisik yang sering tidak sinkron atau eror.
+
+3. Empathy Map
+•	Says: "Mesin fingerprint-nya sering error kalau jari agak basah," "Bisa nggak sih absen langsung dari HP/laptop pas sampai kantor?"
+•	Thinks: "Gajiku kepotong nggak ya kalau lupa absen pulang kemarin?"
+•	Does: Lari terburu-buru mengejar antrean mesin absensi, sering bertanya ke HR untuk memastikan kehadirannya tercatat.
+•	Feels: Kesal karena harus antre, cemas insentif kehadiran hangus akibat masalah teknis mesin fisik.
+•	Pains: Pemotongan gaji akibat absensi gagal terekam, waktu terbuang sia-sia di antrean lobi.
+•	Gains: Proses absensi mandiri yang instan (1–3 detik), kepastian status hadir secara real-time, dan akses mudah melihat riwayat kerja pribadi.
+
+4. Problem Statement & HMW
+•	Problem Statement: Karyawan membutuhkan website absensi mandiri yang cepat dan praktis karena ketergantungan pada mesin absensi fisik memicu antrean panjang dan risiko data kehadiran tidak terekam akurat.
+•	HMW (How Might We): How might we merancang website absensi yang memungkinkan karyawan mencatat kehadiran secara akurat dalam hitungan detik tanpa perlu mengantre di mesin fisik?
+
+5. Brainstorming (10 Ide Solusi)
+•	Ide 1: Tombol absensi satu klik (One-Click Clock-in / Clock-out) berukuran besar dengan konfirmasi instan.
+•	Ide 2: Verifikasi lokasi radius kantor (Geofencing) otomatis via GPS browser untuk memastikan karyawan berada di area kerja.
+•	Ide 3: Jam digital interaktif (Live Clock) dengan detik yang sinkron dengan server kantor.
+•	Ide 4: Kalender kehadiran visual dengan kode warna (Hijau = Hadir tepat waktu, Oranye = Terlambat, Biru = Izin/Cuti).
+•	Ide 5: Formulir kilat pengajuan izin/sakit langsung di dashboard dengan fitur unggah surat dokter.
+•	Ide 6: Notifikasi pop-up pengingat absen pulang jika browser kantor mendeteksi waktu shift telah berakhir.
+•	Ide 7: Tombol alih bahasa instan (ID | EN) di pojok navigasi atas.
+•	Ide 8: Ringkasan akumulasi jam kerja bulanan untuk memantau waktu kerja reguler dan estimasi lembur.
+•	Ide 9: Mode Offline Cache (PWA) yang mencatat waktu absen secara lokal jika koneksi Wi-Fi kantor mendadak terputus.
+•	Ide 10: Tombol ekspor rekapitulasi absensi bulanan ke format Excel/PDF untuk karyawan maupun admin.
+
+
+6. Pilih Satu Ide
+•	Ide Terpilih: Portal Web "HadirKu" (One-Click Attendance & Self-Service Portal).
+•	Fokus: Menggabungkan tombol absen 1-klik berbasis validasi lokasi (Geofencing GPS) dan kalender kehadiran transparan dalam satu halaman utama yang bersih.
+
+7. Prototype (Struktur Halaman Web Sederhana)
+Komponen Antarmuka	Elemen UI	Fungsi & Kegunaan
+Header Navigasi	Logo "HadirKu", Jam Digital Real-time, Toggle Bahasa (ID | EN), dan Avatar Profil.	Menunjukkan identitas karyawan dan waktu presisi saat itu.
+Aksi Absensi (Utama)	Tombol besar "Absen Masuk" (Hijau #10B981) atau "Absen Pulang" (Oranye #EA580C) dengan status badge "Dalam Radius Kantor".	Karyawan cukup menekan satu tombol tanpa mengetik formulir apa pun.
+Status Hari Ini	Tiga kartu metrik: Jam Masuk (08:02), Jam Keluar (--:--), dan Durasi Bekerja (03j 45m).	Memberikan rasa tenang bahwa absensi hari ini sudah sukses tercatat.
+Riwayat Mingguan	Tabel/kalender minimalis 7 hari terakhir dengan label status kehadiran warna-warni.	Karyawan bisa memantau kedisiplinan dan jumlah hadirnya sendiri.
+8. Uji Cepat & Catat Feedback
+•	Feedback 1: Karyawan merasa sangat terbantu karena proses absen selesai dalam hitungan detik tanpa menyentuh mesin fisik bersama.
+
+•	Feedback 2: Saat karyawan berada di sudut lantai gedung tertutup, sinyal GPS browser kadang butuh beberapa detik untuk mendeteksi radius kantor.
+•	Feedback 3: Beberapa pengguna takut tidak sengaja menekan tombol "Absen Pulang" saat membuka dashboard di siang hari.
+•	Rencana Perbaikan: Menambahkan pop-up dialog konfirmasi ("Apakah Anda yakin ingin menyelesaikan shift dan absen pulang?") sebelum tombol Absen Pulang diproses, serta memperlebar batas radius GPS kantor menjadi 50–100 meter untuk mengakomodasi kelemahan sinyal dalam ruangan.
+
