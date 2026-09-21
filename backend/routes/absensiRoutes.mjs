@@ -9,11 +9,15 @@ import {
     getStatistikAdmin,
     hapusAbsensi
 } from '../controllers/absensiController.mjs';
+import { verifyToken, requireAdmin } from '../middleware/authMiddleware.mjs';
 
 const router = express.Router();
 
+// Seluruh rute absensi mewajibkan token JWT yang valid
+router.use(verifyToken);
+
 // Rute Statistik Admin HR
-router.get('/statistik', getStatistikAdmin);
+router.get('/statistik', requireAdmin, getStatistikAdmin);
 
 // Rute Presensi Hari Ini
 router.get('/hari-ini', getAbsensiHariIni);
@@ -28,6 +32,6 @@ router.post('/pulang', absenPulang);
 
 // Rute Semua Absensi & Hapus
 router.get('/', getSemuaAbsensi);
-router.delete('/:id', hapusAbsensi);
+router.delete('/:id', requireAdmin, hapusAbsensi);
 
 export default router;

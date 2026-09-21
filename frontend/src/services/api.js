@@ -1,11 +1,15 @@
 const BASE_URL = 'http://localhost:5000/api';
 
-// Helper fetch wrapper
+// Helper fetch wrapper dengan otomatis menyertakan Authorization Bearer Token
 async function request(endpoint, options = {}) {
     try {
+        const token = sessionStorage.getItem('hadirku_token') || localStorage.getItem('hadirku_token');
+        const authHeader = token ? { 'Authorization': `Bearer ${token}` } : {};
+
         const res = await fetch(`${BASE_URL}${endpoint}`, {
             headers: {
                 'Content-Type': 'application/json',
+                ...authHeader,
                 ...options.headers,
             },
             ...options,
@@ -13,6 +17,11 @@ async function request(endpoint, options = {}) {
 
         const data = await res.json();
         if (!res.ok) {
+            // Jika token kedaluwarsa atau tidak valid pada rute terproteksi
+            if (res.status === 401 && endpoint !== '/karyawan/login') {
+                sessionStorage.removeItem('hadirku_token');
+                sessionStorage.removeItem('hadirku_user');
+            }
             throw new Error(data.message || data.error || 'Terjadi kesalahan pada server');
         }
         return data;

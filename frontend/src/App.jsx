@@ -6,25 +6,37 @@ import EmployeeDashboard from './pages/EmployeeDashboard';
 import AdminDashboard from './pages/AdminDashboard';
 
 function App() {
-    // Pengguna harus melakukan login terlebih dahulu (tidak ada auto-login otomatis)
+    // Pengguna harus melakukan login terlebih dahulu dengan token yang valid
     const [currentUser, setCurrentUser] = useState(() => {
-        // Gunakan sessionStorage agar sesi terbatas hanya pada tab aktif saat ini
         const saved = sessionStorage.getItem('hadirku_user');
-        return saved ? JSON.parse(saved) : null;
+        const token = sessionStorage.getItem('hadirku_token');
+        if (saved && token) {
+            try {
+                return JSON.parse(saved);
+            } catch {
+                return null;
+            }
+        }
+        return null;
     });
     const [lang, setLang] = useState('ID');
 
-    const handleLoginSuccess = (user) => {
+    const handleLoginSuccess = (user, token) => {
         setCurrentUser(user);
         sessionStorage.setItem('hadirku_user', JSON.stringify(user));
-        // Bersihkan localStorage lama jika ada
+        if (token) {
+            sessionStorage.setItem('hadirku_token', token);
+        }
         localStorage.removeItem('hadirku_user');
+        localStorage.removeItem('hadirku_token');
     };
 
     const handleLogout = () => {
         setCurrentUser(null);
         sessionStorage.removeItem('hadirku_user');
+        sessionStorage.removeItem('hadirku_token');
         localStorage.removeItem('hadirku_user');
+        localStorage.removeItem('hadirku_token');
     };
 
     return (

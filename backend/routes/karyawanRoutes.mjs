@@ -7,17 +7,18 @@ import {
     hapusKaryawan,
     loginKaryawan
 } from '../controllers/karyawanController.mjs';
+import { verifyToken, requireAdmin } from '../middleware/authMiddleware.mjs';
 
 const router = express.Router();
 
-// Autentikasi / Login Cepat
+// Autentikasi / Login (Public)
 router.post('/login', loginKaryawan);
 
-// Rute CRUD Karyawan
-router.get('/', getSemuaKaryawan);
-router.get('/:id', getKaryawanById);
-router.post('/', tambahKaryawan);
-router.put('/:id', updateKaryawan);
-router.delete('/:id', hapusKaryawan);
+// Rute CRUD Karyawan (Memerlukan Token JWT)
+router.get('/', verifyToken, getSemuaKaryawan);
+router.get('/:id', verifyToken, getKaryawanById);
+router.post('/', verifyToken, requireAdmin, tambahKaryawan);
+router.put('/:id', verifyToken, updateKaryawan);
+router.delete('/:id', verifyToken, requireAdmin, hapusKaryawan);
 
 export default router;
