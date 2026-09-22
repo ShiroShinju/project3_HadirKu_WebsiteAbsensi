@@ -45,7 +45,7 @@ export const ajukanIzin = async (req, res) => {
         });
 
         res.status(201).json({
-            message: 'Pengajuan izin/cuti berhasil dikirim ke Tim HR! 🚀',
+            message: 'Pengajuan izin/cuti berhasil dikirim ke Tim HR! :3',
             data: { id: newId, karyawan_id, tanggal_mulai, tanggal_selesai, tipe, alasan, status: 'Menunggu' }
         });
     } catch (error) {
