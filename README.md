@@ -12,7 +12,7 @@ Aplikasi Web Absensi & Portal Karyawan Modern berbasis **Design Thinking**, meng
    - Tombol **Absen Masuk** otomatis mendeteksi ketepatan waktu (Toleransi jam 08:15 WIB).
    - Dialog konfirmasi interaktif sebelum **Absen Pulang** (Feedback 3 Design Thinking).
 2. **Kartu Metrik Kehadiran Hari Ini**:
-   - **Jam Masuk**: Status badge *Tepat Waktu* / *Terlambat*.
+   - **Jam Masuk**: Status badge *Tepat Waktu* / *Terlambat**.
    - **Jam Keluar**: Status kepulangan shift kerja.
    - **Durasi Kerja**: Dihitung otomatis secara dinamis & realtime.
 3. **Riwayat Kehadiran & Kalender Pekan Ini**:
@@ -57,6 +57,7 @@ Struktur folder mengikuti arsitektur modular ES Modules (`nodejs_esm`):
 
 ```text
 project3/
+├── .gitignore                     # Aturan pengabaian file git (node_modules, .env, dist)
 ├── backend/
 │   ├── config/
 │   │   └── db.mjs                  # Koneksi pool mysql2/promise ke karyawan2_db
@@ -103,9 +104,41 @@ project3/
 
 ---
 
-## 🚀 Cara Menjalankan Aplikasi
+## 🚀 Panduan Memulai & Menjalankan Aplikasi
 
-### 1. Inisialisasi Database MySQL
+> [!IMPORTANT]
+> **Wajib untuk Pengguna Baru / Setelah Clone dari GitHub:**
+> Repositori ini tidak menyertakan folder `node_modules`. Anda **harus menginstal dependensi terlebih dahulu** sebelum menjalankan aplikasi.
+
+### Langkah 1: Clone Repositori
+```bash
+git clone https://github.com/ShiroShinju/project3.git
+cd project3
+```
+
+---
+
+### Langkah 2: Instalasi Dependensi (Backend & Frontend)
+
+Anda perlu menginstal dependensi pada kedua folder (`backend` dan `frontend`):
+
+#### 1. Instalasi Dependensi Backend
+```bash
+cd backend
+npm install
+cd ..
+```
+
+#### 2. Instalasi Dependensi Frontend
+```bash
+cd frontend
+npm install
+cd ..
+```
+
+---
+
+### Langkah 3: Inisialisasi Database MySQL
 
 1. Pastikan service MySQL Anda telah aktif (melalui XAMPP, Laragon, MySQL Workbench, atau WebStorm Database Tool).
 2. Jalankan script SQL pada [`backend/console.sql`](file:///C:/WorkspaceBBPVP/project3/backend/console.sql) untuk membuat database `karyawan2_db`, tabel, dan seed datanya:
@@ -117,39 +150,31 @@ project3/
    const db = await mysql.createConnection({
        host: 'localhost',
        user: 'root',
-       password: 'Anjay123456-', // Sesuaikan dengan password MySQL Anda
+       password: 'your_mysql_password', // Sesuaikan dengan password MySQL Anda
        database: 'karyawan2_db'
    });
    ```
 
 ---
 
-### 2. Menjalankan Backend API
+### Langkah 4: Menjalankan Server & Aplikasi
 
-Buka terminal pada direktori `backend`:
+Gunakan dua terminal terpisah:
 
+#### Terminal 1 — Menjalankan Backend API:
 ```bash
 cd backend
-npm install
 npm run dev
 ```
+- Server backend aktif di: **`http://localhost:5000`**
+- Cek status endpoint: **`http://localhost:5000/api/health`**
 
-Server backend akan aktif di: **`http://localhost:5000`**  
-Status koneksi dapat dicek via browser: **`http://localhost:5000/api/health`**
-
----
-
-### 3. Menjalankan Frontend React
-
-Buka terminal baru pada direktori `frontend`:
-
+#### Terminal 2 — Menjalankan Frontend React (Vite):
 ```bash
 cd frontend
-npm install
 npm run dev
 ```
-
-Aplikasi web dapat diakses melalui browser di: **`http://localhost:5173`**
+- Akses aplikasi web melalui browser di: **`http://localhost:5173`**
 
 ---
 
