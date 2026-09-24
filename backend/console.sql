@@ -3,7 +3,7 @@ CREATE DATABASE karyawan2_db;
 USE karyawan2_db;
 
 -- 1. Tabel Data Karyawan
-CREATE TABLE karyawan (
+CREATE TABLE IF NOT EXISTS karyawan (
     id INT PRIMARY KEY AUTO_INCREMENT,
     nama VARCHAR(100) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -40,7 +40,6 @@ CREATE TABLE izin (
     tipe VARCHAR(50) DEFAULT 'Cuti',
     alasan TEXT DEFAULT NULL,
     status ENUM('Menunggu', 'Disetujui', 'Ditolak') DEFAULT 'Menunggu',
-    jenis ENUM('Menunggu', 'Disetujui', 'Ditolak') DEFAULT 'Disetujui',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (karyawan_id) REFERENCES karyawan(id) ON DELETE CASCADE
 );
@@ -49,21 +48,23 @@ CREATE TABLE izin (
 -- Data Awal (Dummy Data) untuk Pengujian & Presentasi
 -- ===================================================
 
--- Password default untuk semua akun demo: 123456 (Hashed dengan bcrypt: $2a$10$R9h/cIPz0gi.URNNWB345.K8xZ.VlMv68Qn3Z3YdM33FmYgRqm/i2)
+-- Password default untuk semua akun demo: 123456 (Hashed dengan bcrypt: $2b$10$yK/dvh2n6V3RHIzH.hx.7eFFkE.qxSRieQkV2Rquvj4cLOqTdV3Xq)
 INSERT INTO karyawan (id, nama, email, password, posisi, avatar, role) VALUES
-(1, 'Alexsander Jajang', 'alexjajang@gmail.com', '$2a$10$R9h/cIPz0gi.URNNWB345.K8xZ.VlMv68Qn3Z3YdM33FmYgRqm/i2', 'Senior Software Engineer', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80', 'karyawan'),
-(2, 'Siti Nurhaliza', 'siti.nurhaliza@hadirku.id', '$2a$10$R9h/cIPz0gi.URNNWB345.K8xZ.VlMv68Qn3Z3YdM33FmYgRqm/i2', 'UI/UX Product Designer', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', 'karyawan'),
-(3, 'Ahmad Fauzi', 'ahmad.fauzi@hadirku.id', '$2a$10$R9h/cIPz0gi.URNNWB345.K8xZ.VlMv68Qn3Z3YdM33FmYgRqm/i2', 'Human Resources Specialist', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', 'admin'),
-(4, 'Dewi Lestari', 'dewi.lestari@hadirku.id', '$2a$10$R9h/cIPz0gi.URNNWB345.K8xZ.VlMv68Qn3Z3YdM33FmYgRqm/i2', 'Marketing Manager', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80', 'karyawan');
+(1, 'Alexsander Jajang', 'alexjajang@gmail.com', '$2b$10$yK/dvh2n6V3RHIzH.hx.7eFFkE.qxSRieQkV2Rquvj4cLOqTdV3Xq', 'Senior Software Engineer', 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80', 'karyawan'),
+(2, 'Siti Nurhaliza', 'siti.nurhaliza@hadirku.id', '$2b$10$yK/dvh2n6V3RHIzH.hx.7eFFkE.qxSRieQkV2Rquvj4cLOqTdV3Xq', 'UI/UX Product Designer', 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&auto=format&fit=crop&q=80', 'karyawan'),
+(3, 'Ahmad Fauzi', 'ahmad.fauzi@hadirku.id', '$2b$10$yK/dvh2n6V3RHIzH.hx.7eFFkE.qxSRieQkV2Rquvj4cLOqTdV3Xq', 'Human Resources Specialist', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80', 'admin'),
+(4, 'Dewi Lestari', 'dewi.lestari@hadirku.id', '$2b$10$yK/dvh2n6V3RHIzH.hx.7eFFkE.qxSRieQkV2Rquvj4cLOqTdV3Xq', 'Marketing Manager', 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80', 'karyawan');
 
--- Tambah Data Riwayat Absensi Budi Pratama / Alexsander (6 Hari Terakhir)
+-- Tambah Data Riwayat Absensi Alexsander Jajang (6 Hari Terakhir)
 INSERT INTO absensi (karyawan_id, tanggal, jam_masuk, jam_pulang, durasi_kerja, status, lokasi_masuk, lokasi_pulang, catatan) VALUES
 (1, DATE_SUB(CURDATE(), INTERVAL 6 DAY), '07:55:00', '17:05:00', '09j 10m', 'Tepat Waktu', 'Kantor Pusat (Radius 12m)', 'Kantor Pusat (Radius 15m)', 'Hadir di Kantor'),
 (1, DATE_SUB(CURDATE(), INTERVAL 5 DAY), '08:02:00', '17:00:00', '08j 58m', 'Tepat Waktu', 'Kantor Pusat (Radius 20m)', 'Kantor Pusat (Radius 18m)', 'Hadir di kantor'),
 (1, DATE_SUB(CURDATE(), INTERVAL 4 DAY), '08:18:00', '17:30:00', '09j 12m', 'Terlambat', 'Kantor Pusat (Radius 25m)', 'Kantor Pusat (Radius 22m)', 'Macet di jalan tol'),
 (1, DATE_SUB(CURDATE(), INTERVAL 3 DAY), '07:50:00', '16:55:00', '09j 05m', 'Tepat Waktu', 'Kantor Pusat (Radius 10m)', 'Kantor Pusat (Radius 14m)', 'Hadir tepat waktu'),
 (1, DATE_SUB(CURDATE(), INTERVAL 2 DAY), '08:00:00', '17:15:00', '09j 15m', 'Tepat Waktu', 'Kantor Pusat (Radius 15m)', 'Kantor Pusat (Radius 10m)', 'Hadir di kantor'),
-(1, DATE_SUB(CURDATE(), INTERVAL 1 DAY), '08:05:00', '17:10:00', '09j 05m', 'Tepat Waktu', 'Kantor Pusat (Radius 18m)', 'Kantor Pusat (Radius 12m)', 'Hadir di kantor');
+(1, DATE_SUB(CURDATE(), INTERVAL 1 DAY), '08:05:00', '17:10:00', '09j 05m', 'Tepat Waktu', 'Kantor Pusat (Radius 18m)', 'Kantor Pusat (Radius 12m)', 'Hadir di kantor'),
+-- Absensi hari ini untuk Dewi Lestari (agar dashboard KPI admin langsung menampilkan 1 hadir tepat waktu)
+(4, CURDATE(), '07:58:00', NULL, NULL, 'Tepat Waktu', 'Kantor Pusat (Radius 14m)', NULL, 'Hadir tepat waktu di kantor');
 
 -- Tambah Data Pengajuan Izin
 INSERT INTO izin (karyawan_id, tanggal_mulai, tanggal_selesai, tipe, alasan, status) VALUES

@@ -24,14 +24,14 @@ Aplikasi Web Absensi & Portal Karyawan Modern berbasis **Design Thinking**, meng
 5. **Dashboard Konsol HR & Admin Management**:
    - **4 Indikator KPI Utama**: Total Karyawan Aktif, Hadir Hari Ini, Terlambat, Pengajuan Cuti Menunggu.
    - **Live Monitoring Presensi**: Tabel log presensi real-time seluruh divisi.
-   - **Kelola Data Karyawan (CRUD Lengkap)**: Tambah, Edit, dan Hapus Karyawan langsung ke MySQL dengan otomatisasi enkripsi password.
+   - **Kelola Data Karyawan (CRUD Lengkap)**: Tambah, Edit, dan Hapus Karyawan langsung ke MySQL dengan otomatisasi enkripsi password & fitur reset password.
    - **Persetujuan Cuti**: Aksi *Setujui* atau *Tolak* permohonan izin karyawan secara instan.
    - **Ekspor Rekap Bulanan**: Unduh data presensi ke format file CSV / Excel atau Cetak Dokumen Laporan (PDF).
 6. **Autentikasi & Portal Keamanan (Bcrypt + JWT)**:
    - Verifikasi login email/NIP dan kata sandi menggunakan hash **Bcrypt**.
    - Pengamanan sesi menggunakan token **JWT (JSON Web Token)** dengan masa aktif 24 jam.
    - Tab switcher role *Karyawan (Portal Pribadi)* dan *Admin / HR (Manajemen Tim)* dengan validasi role otomatis.
-   - Tombol pengisian cepat (*quick-fill*) akun demo untuk memudahkan demonstrasi dan pengujian.
+   - **Tombol Pintas Akun Demo (Quick-Fill)** pada halaman login untuk memudahkan demonstrasi dan pengujian dalam 1 kali klik.
 
 ---
 
@@ -41,16 +41,19 @@ Tabel `karyawan` pada file [`backend/console.sql`](file:///C:/WorkspaceBBPVP/pro
 
 | Role | Nama | Email / Identifier | Password Default | Akses Halaman |
 | :--- | :--- | :--- | :--- | :--- |
-| **Karyawan** | Alexsander Jajang | `alexjajang@gmail.com` | `123456` | Portal Presensi Karyawan |
-| **Karyawan** | Siti Nurhaliza | `siti.nurhaliza@hadirku.id` | `123456` | Portal Presensi Karyawan |
-| **Admin / HR** | Ahmad Fauzi | `ahmad.fauzi@hadirku.id` | `123456` | Konsol Manajemen HR / Admin |
-| **Karyawan** | Dewi Lestari | `dewi.lestari@hadirku.id` | `123456` | Portal Presensi Karyawan |
+| **Karyawan** | Alexsander Jajang | `alexjajang@gmail.com` | `123456` | Portal Presensi Karyawan (`/dashboard`) |
+| **Karyawan** | Siti Nurhaliza | `siti.nurhaliza@hadirku.id` | `123456` | Portal Presensi Karyawan (`/dashboard`) |
+| **Admin / HR** | Ahmad Fauzi | `ahmad.fauzi@hadirku.id` | `123456` | Konsol Manajemen HR / Admin (`/admin`) |
+| **Karyawan** | Dewi Lestari | `dewi.lestari@hadirku.id` | `123456` | Portal Presensi Karyawan (`/dashboard`) |
+| **Admin / HR** | Bambang Pamungkas | `bambang.pamungkas@hadirku.id` | `123456` | Konsol Manajemen HR / Admin (`/admin`) |
+
+> 💡 **Tips Pengujian:** Pada halaman login, Anda dapat langsung mengklik tombol **👤 Alexsander (Karyawan)** atau **🛡️ Ahmad Fauzi (Admin HR)** untuk otomatis mengisi form login.
 
 ---
 
 ## 🏗️ Struktur Arsitektur Proyek
 
-Struktur folder mengikuti standar Express ESM + MySQL (`nodejs_esm`):
+Struktur folder mengikuti arsitektur modular ES Modules (`nodejs_esm`):
 
 ```text
 project3/
@@ -60,9 +63,9 @@ project3/
 │   ├── controllers/
 │   │   ├── absensiController.mjs   # Kontroler clock in/out, riwayat, statistik
 │   │   ├── izinController.mjs      # Kontroler pengajuan & persetujuan cuti
-│   │   └── karyawanController.mjs  # Kontroler CRUD karyawan & login auth
+│   │   └── karyawanController.mjs  # Kontroler CRUD karyawan & login auth (Bcrypt/JWT)
 │   ├── middleware/
-│   │   └── authMiddleware.mjs      # Middleware verifikasi JWT & otorisasi role
+│   │   └── authMiddleware.mjs      # Middleware verifikasi JWT & otorisasi role (admin/karyawan)
 │   ├── models/
 │   │   ├── absensiModel.mjs        # Query database absensi
 │   │   ├── izinModel.mjs           # Query database izin/cuti
@@ -72,28 +75,28 @@ project3/
 │   │   ├── izinRoutes.mjs          # Router /api/izin
 │   │   └── karyawanRoutes.mjs      # Router /api/karyawan & /login
 │   ├── console.sql                 # DDL, struktur tabel & Seed Data MySQL
-│   ├── test_api.rest               # Pengujian REST Client API
+│   ├── test_api.rest               # Pengujian REST Client API dengan Bearer Token
 │   ├── index.mjs                   # Entry point server Express 5 (Port 5000)
 │   └── package.json
 │
 ├── frontend/
 │   ├── src/
 │   │   ├── components/
-│   │   │   └── Navbar.jsx          # Header navigasi, jam WIB, ID/EN toggle, avatar, logout
+│   │   │   └── Navbar.jsx          # Header navigasi, jam WIB, ID/EN toggle, user chip, logout
 │   │   ├── pages/
-│   │   │   ├── AdminDashboard.jsx  # Konsol HR/Admin (KPI, CRUD Karyawan, Ekspor)
-│   │   │   ├── EmployeeDashboard.jsx # Dashboard presensi karyawan 1-klik & metrik
-│   │   │   └── LoginPage.jsx       # Halaman login portal presensi (Bcrypt & JWT)
+│   │   │   ├── AdminDashboard.jsx  # Konsol HR/Admin (KPI, CRUD Karyawan + Reset Password, Ekspor)
+│   │   │   ├── EmployeeDashboard.jsx # Dashboard presensi karyawan 1-klik & metrik kehadiran
+│   │   │   └── LoginPage.jsx       # Halaman login portal presensi (Bcrypt, JWT, Quick-Fill Demo)
 │   │   ├── services/
-│   │   │   └── api.js              # Service wrapper fetch API backend & token auth
+│   │   │   └── api.js              # Service wrapper fetch API backend & token auth Bearer
 │   │   ├── App.jsx                 # Routing React Router DOM & state sesi login
 │   │   ├── index.css               # Styling Plus Jakarta Sans & utilitas
 │   │   └── main.jsx
 │   ├── index.html                  # Tailwind CSS & Luminous Presence design tokens
-│   ├── vite.config.js              # Konfigurasi Vite & reverse proxy
+│   ├── vite.config.js              # Konfigurasi Vite & dev proxy
 │   └── package.json
 │
-├── tampilan1/                      # Referensi desain asli & mockup HTML
+├── tampilan1/                      # Referensi mockup desain HTML awal
 ├── design_thinking_text_based.txt  # Dokumen spesifikasi kebutuhan sistem
 └── README.md
 ```
@@ -104,17 +107,20 @@ project3/
 
 ### 1. Inisialisasi Database MySQL
 
-Pastikan service MySQL Anda sudah berjalan (misalnya melalui XAMPP, Laragon, MySQL Workbench, atau WebStorm Database Tool).
-
-Jalankan script query yang terdapat di file [`backend/console.sql`](file:///C:/WorkspaceBBPVP/project3/backend/console.sql) untuk:
-- Membuat database `karyawan2_db`
-- Membuat tabel `karyawan`, `absensi`, dan `izin`
-- Memasukkan data awal (seed data) beserta password bcrypt
-
-Contoh melalui terminal MySQL:
-```bash
-mysql -u root -p < backend/console.sql
-```
+1. Pastikan service MySQL Anda telah aktif (melalui XAMPP, Laragon, MySQL Workbench, atau WebStorm Database Tool).
+2. Jalankan script SQL pada [`backend/console.sql`](file:///C:/WorkspaceBBPVP/project3/backend/console.sql) untuk membuat database `karyawan2_db`, tabel, dan seed datanya:
+   ```bash
+   mysql -u root -p < backend/console.sql
+   ```
+3. Sesuaikan kredensial koneksi database pada file [`backend/config/db.mjs`](file:///C:/WorkspaceBBPVP/project3/backend/config/db.mjs) sesuai pengaturan MySQL lokal Anda:
+   ```javascript
+   const db = await mysql.createConnection({
+       host: 'localhost',
+       user: 'root',
+       password: 'Anjay123456-', // Sesuaikan dengan password MySQL Anda
+       database: 'karyawan2_db'
+   });
+   ```
 
 ---
 
@@ -128,7 +134,8 @@ npm install
 npm run dev
 ```
 
-Server backend akan aktif di: **`http://localhost:5000`**
+Server backend akan aktif di: **`http://localhost:5000`**  
+Status koneksi dapat dicek via browser: **`http://localhost:5000/api/health`**
 
 ---
 
@@ -146,23 +153,33 @@ Aplikasi web dapat diakses melalui browser di: **`http://localhost:5173`**
 
 ---
 
-## 🧪 Pengujian Endpoint API
+## 🧪 Pengujian Endpoint API & Client Service ([`frontend/src/services/api.js`](file:///C:/WorkspaceBBPVP/project3/frontend/src/services/api.js))
 
-File pengujian REST Client telah disediakan di [`backend/test_api.rest`](file:///C:/WorkspaceBBPVP/project3/backend/test_api.rest) yang dapat dijalankan langsung menggunakan ekstensi **REST Client** di WebStorm atau VS Code.
+Frontend mengonsumsi API backend melalui service module [`frontend/src/services/api.js`](file:///C:/WorkspaceBBPVP/project3/frontend/src/services/api.js) dengan otomatis menyertakan header `Authorization: Bearer <jwt_token>` yang disimpan pada `sessionStorage` / `localStorage`.
 
-### Ringkasan Endpoint Utama:
+Pengujian API secara langsung dapat dilakukan menggunakan file [`backend/test_api.rest`](file:///C:/WorkspaceBBPVP/project3/backend/test_api.rest) (didukung di WebStorm HTTP Client & VS Code REST Client).
 
-| Method | Endpoint | Keterangan |
-| :--- | :--- | :--- |
-| `POST` | `/api/karyawan/login` | Login karyawan/admin (verifikasi bcrypt, menghasilkan token JWT) |
-| `GET` | `/api/karyawan` | Mengambil seluruh daftar karyawan |
-| `POST` | `/api/karyawan` | Menambah karyawan baru (password di-hash otomatis) |
-| `PUT` | `/api/karyawan/:id` | Memperbarui profil karyawan |
-| `DELETE`| `/api/karyawan/:id` | Menghapus data karyawan |
-| `GET` | `/api/absensi/statistik` | Mengambil data indikator metrik untuk Dashboard Admin |
-| `GET` | `/api/absensi/status-hari-ini/:id` | Mengecek status presensi karyawan hari ini |
-| `POST` | `/api/absensi/masuk` | Melakukan Clock-In (Absen Masuk) |
-| `POST` | `/api/absensi/pulang` | Melakukan Clock-Out (Absen Pulang) |
-| `GET` | `/api/izin` | Mengambil seluruh daftar pengajuan izin/cuti |
-| `POST` | `/api/izin` | Mengajukan izin / cuti baru |
-| `PUT` | `/api/izin/:id/status` | Konfirmasi status izin (*Disetujui* / *Ditolak*) |
+### Daftar Endpoint Lengkap:
+
+| Method | Endpoint | Fungsi di `api.js` | Akses / Auth | Keterangan |
+| :--- | :--- | :--- | :--- | :--- |
+| `GET` | `/api/health` | `api.checkHealth()` | Publik | Cek status online server backend |
+| `POST` | `/api/karyawan/login` | `api.login(payload)` | Publik | Login & mendapatkan JWT token |
+| `GET` | `/api/karyawan` | `api.getKaryawan()` | Admin | Daftar seluruh karyawan |
+| `GET` | `/api/karyawan/:id` | `api.getKaryawanById(id)`| Admin / User | Detail profil karyawan |
+| `POST` | `/api/karyawan` | `api.createKaryawan(payload)`| Admin | Tambah karyawan baru (hash password) |
+| `PUT` | `/api/karyawan/:id` | `api.updateKaryawan(id, payload)`| Admin | Edit profil & reset password |
+| `DELETE`| `/api/karyawan/:id` | `api.deleteKaryawan(id)`| Admin | Hapus karyawan |
+| `GET` | `/api/absensi/statistik`| `api.getAdminStats()` | Admin | Indikator KPI Dashboard Admin |
+| `GET` | `/api/absensi/hari-ini` | `api.getAbsensiHariIni()` | Admin | Log presensi hari ini |
+| `GET` | `/api/absensi/status-hari-ini/:id` | `api.getStatusHariIni(id)` | User | Status masuk/pulang hari ini |
+| `GET` | `/api/absensi/riwayat/:id?limit=14`| `api.getRiwayatKaryawan(id, limit)` | User | Riwayat presensi personal |
+| `GET` | `/api/absensi` | `api.getAllAbsensi()` | Admin | Seluruh riwayat presensi |
+| `POST` | `/api/absensi/masuk` | `api.clockIn(payload)` | User | Rekam Absen Masuk (Clock-In) |
+| `POST` | `/api/absensi/pulang` | `api.clockOut(payload)` | User | Rekam Absen Pulang (Clock-Out) |
+| `DELETE`| `/api/absensi/:id` | `api.deleteAbsensi(id)` | Admin | Hapus log absensi tertentu |
+| `GET` | `/api/izin` | `api.getAllIzin()` | Admin | Seluruh pengajuan izin / cuti |
+| `GET` | `/api/izin/karyawan/:id` | `api.getIzinByKaryawan(id)` | User | Daftar izin milik karyawan login |
+| `POST` | `/api/izin` | `api.ajukanIzin(payload)` | User | Form permohonan izin baru |
+| `PUT` | `/api/izin/:id/status` | `api.updateStatusIzin(id, status)` | Admin | Setujui atau Tolak izin |
+| `DELETE`| `/api/izin/:id` | `api.deleteIzin(id)` | Admin | Hapus pengajuan izin |

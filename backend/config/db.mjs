@@ -5,7 +5,7 @@ console.log('Menghubungkan ke database... 🤔');
 const db = await mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: 'anjay123456',
+    password: 'Anjay123456-',
     database: 'karyawan2_db'
 });
 

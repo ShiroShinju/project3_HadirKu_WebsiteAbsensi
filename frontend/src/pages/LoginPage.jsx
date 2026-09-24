@@ -40,6 +40,20 @@ export default function LoginPage({ onLoginSuccess, lang }) {
         return () => clearInterval(healthInterval);
     }, [verifyServerHealth]);
 
+    // Fungsi Pengisian Cepat Akun Demo (Quick-Fill)
+    const handleQuickFill = (role) => {
+        setErrorMsg('');
+        if (role === 'karyawan') {
+            setRoleTab('karyawan');
+            setIdentifier('alexjajang@gmail.com');
+            setPassword('123456');
+        } else {
+            setRoleTab('admin');
+            setIdentifier('ahmad.fauzi@hadirku.id');
+            setPassword('123456');
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -201,6 +215,29 @@ export default function LoginPage({ onLoginSuccess, lang }) {
                         </div>
                     </div>
 
+                    {/* Quick Demo Fill Pills */}
+                    <div className="mt-3.5 p-2.5 rounded-2xl bg-gray-50/90 border border-gray-200/70 text-center">
+                        <span className="text-[11px] font-bold text-gray-500 block mb-1.5">
+                            ⚡ Klik Cepat Akun Demo (Pengujian):
+                        </span>
+                        <div className="flex items-center justify-center gap-2">
+                            <button
+                                type="button"
+                                onClick={() => handleQuickFill('karyawan')}
+                                className="px-2.5 py-1 rounded-xl bg-white hover:bg-emerald-50 text-emerald-800 text-[11px] font-semibold border border-gray-200 shadow-xs transition-all active:scale-95"
+                            >
+                                👤 Alexsander (Karyawan)
+                            </button>
+                            <button
+                                type="button"
+                                onClick={() => handleQuickFill('admin')}
+                                className="px-2.5 py-1 rounded-xl bg-white hover:bg-blue-50 text-blue-800 text-[11px] font-semibold border border-gray-200 shadow-xs transition-all active:scale-95"
+                            >
+                                🛡️ Ahmad Fauzi (Admin HR)
+                            </button>
+                        </div>
+                    </div>
+
                     {/* Error Alert */}
                     {errorMsg && (
                         <div className="mt-4 p-3 rounded-2xl bg-red-50 border border-red-200 text-red-700 text-xs flex items-center gap-2">
@@ -210,7 +247,7 @@ export default function LoginPage({ onLoginSuccess, lang }) {
                     )}
 
                     {/* Form Fields */}
-                    <form onSubmit={handleSubmit} className="space-y-4 mt-5">
+                    <form onSubmit={handleSubmit} className="space-y-4 mt-4">
                         <div className="space-y-1">
                             <label className="block text-xs font-bold text-gray-700 ml-1" htmlFor="nip-input">
                                 {lang === 'ID' ? 'NIP atau Email Perusahaan' : 'NIP or Work Email'}
@@ -224,7 +261,7 @@ export default function LoginPage({ onLoginSuccess, lang }) {
                                     type="text"
                                     value={identifier}
                                     onChange={(e) => setIdentifier(e.target.value)}
-                                    placeholder={roleTab === 'admin' ? 'admin@hadirku.id atau ahmad.fauzi@hadirku.id' : 'alexjajang@gmail.com atau NIP'}
+                                    placeholder={roleTab === 'admin' ? 'ahmad.fauzi@hadirku.id' : 'alexjajang@gmail.com'}
                                     required
                                     autoComplete="username"
                                     className="w-full pl-11 pr-4 py-3 bg-gray-50/70 hover:bg-gray-100/70 focus:bg-white text-gray-900 placeholder:text-gray-400 text-sm rounded-2xl border border-gray-200 focus:border-[#34c759] focus:ring-2 focus:ring-[#34c759]/20 transition-all outline-none shadow-sm"
